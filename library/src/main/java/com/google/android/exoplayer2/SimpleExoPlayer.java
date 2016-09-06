@@ -617,7 +617,6 @@ public class SimpleExoPlayer implements ExoPlayer {
   }
 
   // Renderer building.
-
   private void buildRenderers(Context context, Handler mainHandler,
       DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
       @ExtensionRendererMode int extensionRendererMode, long allowedVideoJoiningTimeMs,
@@ -630,6 +629,17 @@ public class SimpleExoPlayer implements ExoPlayer {
     buildMetadataRenderers(context, mainHandler, extensionRendererMode, componentListener, out);
     buildMiscellaneousRenderers(context, mainHandler, extensionRendererMode, out);
   }
+
+  @Override
+  public float getPlaybackSpeed() {
+    return player.getPlaybackSpeed();
+  }
+
+  @Override
+  public void setPlaybackSpeed(float speed) {
+    player.setPlaybackSpeed(speed);
+  }
+  // Internal methods.
 
   /**
    * Builds video renderers for use by the player.

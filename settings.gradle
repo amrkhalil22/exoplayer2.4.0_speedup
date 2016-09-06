@@ -14,6 +14,7 @@
 include ':library'
 include ':testutils'
 include ':demo'
+include ':demo_speed'
 include ':playbacktests'
 include ':extension-ffmpeg'
 include ':extension-flac'

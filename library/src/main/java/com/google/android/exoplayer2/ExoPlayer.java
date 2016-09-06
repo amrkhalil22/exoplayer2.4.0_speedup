@@ -448,6 +448,7 @@ public interface ExoPlayer {
   int getBufferedPercentage();
 
   /**
+<<<<<<< HEAD
    * Returns whether the current window is dynamic, or {@code false} if the {@link Timeline} is
    * empty.
    *
@@ -463,4 +464,13 @@ public interface ExoPlayer {
    */
   boolean isCurrentWindowSeekable();
 
+  /**
+   * @return the speed factor: speed_of_playback / speed_of_real_clock
+   */
+  float getPlaybackSpeed();
+
+  /**
+   * @param speed the speed factor: speed_of_playback / speed_of_real_clock
+   */
+  void setPlaybackSpeed(float speed);
 }
