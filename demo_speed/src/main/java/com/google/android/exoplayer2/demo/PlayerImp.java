@@ -32,8 +32,6 @@ public class PlayerImp implements IPlayer {
     private DefaultDataSourceFactory mediaDataSourceFactory;
     private MappingTrackSelector trackSelector;
     private boolean playerNeedsSource;
-    private boolean shouldRestorePosition;
-    private int playerPeriodIndex;
     private long playerPosition;
     private Handler mainHandler = new Handler();
 
@@ -70,7 +68,7 @@ public class PlayerImp implements IPlayer {
         }
         if (playerNeedsSource) {
             MediaSource mediaSource = buildMediaSource(uri,"");
-            player.prepare(mediaSource, !shouldRestorePosition);
+            player.prepare(mediaSource, false);
             playerNeedsSource = false;
             playerUI.updateButtonVisibilities();
         }
@@ -79,12 +77,6 @@ public class PlayerImp implements IPlayer {
     @Override
     public boolean hasPlayer() {
         return player != null;
-    }
-
-    @Override
-    public boolean isRenderingVideo(MappingTrackSelector.TrackInfo trackInfo, int index) {
-        return player.getRendererType(index) == C.TRACK_TYPE_VIDEO
-                && trackInfo.getTrackSelection(index) != null;
     }
 
     @Override
@@ -104,9 +96,7 @@ public class PlayerImp implements IPlayer {
         player.setId3Output(eventLogger);
         player.setVideoListener(playerUI);
 
-        if (shouldRestorePosition) {
-            player.seekTo(playerPosition);
-        }
+        player.seekTo(playerPosition);
         player.setPlayWhenReady(true);
         player.setPlaybackSpeed(speed);
         playerUI.onCreatePlayer();
@@ -123,26 +113,21 @@ public class PlayerImp implements IPlayer {
         int type = Util.inferContentType(!TextUtils.isEmpty(overrideExtension) ? "." + overrideExtension
                 : uri.getLastPathSegment());
         switch (type) {
-            case Util.TYPE_SS:
+            case C.TYPE_SS:
                 return new SsMediaSource(uri, new DefaultDataSourceFactory(playerUI.getContext(), userAgent),
                         new DefaultSsChunkSource.Factory(mediaDataSourceFactory), mainHandler, eventLogger);
-            case Util.TYPE_DASH:
+            case C.TYPE_DASH:
                 return new DashMediaSource(uri, new DefaultDataSourceFactory(playerUI.getContext(), userAgent),
                         new DefaultDashChunkSource.Factory(mediaDataSourceFactory), mainHandler, eventLogger);
-            case Util.TYPE_HLS:
+            case C.TYPE_HLS:
                 return new HlsMediaSource(uri, mediaDataSourceFactory, mainHandler, eventLogger);
-            case Util.TYPE_OTHER:
+            case C.TYPE_OTHER:
                 return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
                         mainHandler, eventLogger);
             default: {
                 throw new IllegalStateException("Unsupported type: " + type);
             }
         }
-    }
-
-    @Override
-    public MappingTrackSelector.TrackInfo getTrackInfo() {
-        return trackSelector.getTrackInfo();
     }
 
     @Override

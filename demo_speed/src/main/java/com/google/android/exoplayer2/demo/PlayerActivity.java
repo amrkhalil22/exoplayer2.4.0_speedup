@@ -22,7 +22,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.Surface;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
@@ -34,17 +33,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.mediacodec.MediaCodecRenderer.DecoderInitializationException;
 import com.google.android.exoplayer2.mediacodec.MediaCodecUtil.DecoderQueryException;
-import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
-import com.google.android.exoplayer2.trackselection.MappingTrackSelector.TrackInfo;
+import com.google.android.exoplayer2.trackselection.TrackSelections;
 import com.google.android.exoplayer2.ui.DebugTextViewHelper;
 import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
@@ -299,35 +295,15 @@ public class PlayerActivity extends Activity implements OnKeyListener, OnTouchLi
   }
 
   @Override
-  public void onRenderedFirstFrame(Surface surface) {
+  public void onRenderedFirstFrame() {
+
   }
 
   @Override
-  public void onVideoDisabled(DecoderCounters counters) {
+  public void onVideoTracksDisabled() {
 
   }
 
-  // MappingTrackSelector.EventListener implementation
-
-  @Override
-  public void onTracksChanged(TrackInfo trackInfo) {
-    updateButtonVisibilities();
-    if (trackInfo.hasOnlyUnplayableTracks(C.TRACK_TYPE_VIDEO)) {
-      showToast(R.string.error_unsupported_video);
-    }
-    if (trackInfo.hasOnlyUnplayableTracks(C.TRACK_TYPE_AUDIO)) {
-      showToast(R.string.error_unsupported_audio);
-    }
-    boolean renderingVideo = false;
-    for (int i = 0; i < trackInfo.rendererCount; i++) {
-      if (player.isRenderingVideo(trackInfo, i)) {
-        renderingVideo = true;
-        break;
-      }
-    }
-    if (!renderingVideo) {
-    }
-  }
 
   // User controls
 
@@ -339,37 +315,6 @@ public class PlayerActivity extends Activity implements OnKeyListener, OnTouchLi
 
     if (!player.hasPlayer()) {
       return;
-    }
-
-    TrackInfo trackInfo = player.getTrackInfo();
-    if (trackInfo == null) {
-      return;
-    }
-
-    int rendererCount = trackInfo.rendererCount;
-    for (int i = 0; i < rendererCount; i++) {
-      TrackGroupArray trackGroups = trackInfo.getTrackGroups(i);
-      if (trackGroups.length != 0) {
-        Button button = new Button(this);
-        int label;
-        switch (player.getRendererType(i)) {
-          case C.TRACK_TYPE_AUDIO:
-            label = R.string.audio;
-            break;
-          case C.TRACK_TYPE_VIDEO:
-            label = R.string.video;
-            break;
-          case C.TRACK_TYPE_TEXT:
-            label = R.string.text;
-            break;
-          default:
-            continue;
-        }
-        button.setText(label);
-        button.setTag(i);
-        button.setOnClickListener(this);
-        debugRootView.addView(button);
-      }
     }
   }
 
@@ -410,5 +355,10 @@ public class PlayerActivity extends Activity implements OnKeyListener, OnTouchLi
   @Override
   public void onVisibilityChange(int visibility) {
     debugRootView.setVisibility(visibility);
+  }
+
+  @Override
+  public void onTrackSelectionsChanged(TrackSelections trackSelections) {
+
   }
 }

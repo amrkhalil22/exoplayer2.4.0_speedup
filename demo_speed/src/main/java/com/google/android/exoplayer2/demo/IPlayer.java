@@ -22,13 +22,9 @@ public interface IPlayer {
 
     boolean hasPlayer();
 
-    boolean isRenderingVideo(MappingTrackSelector.TrackInfo trackInfo, int index);
-
     void realReleasePlayer();
 
     void onCreate();
-
-    MappingTrackSelector.TrackInfo getTrackInfo();
 
     boolean isMediaNeddSource();
 

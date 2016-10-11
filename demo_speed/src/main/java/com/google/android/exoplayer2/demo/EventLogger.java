@@ -34,10 +34,9 @@ import com.google.android.exoplayer2.metadata.id3.TxxxFrame;
 import com.google.android.exoplayer2.source.AdaptiveMediaSourceEventListener;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.TrackGroup;
-import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
-import com.google.android.exoplayer2.trackselection.MappingTrackSelector.TrackInfo;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelections;
 import com.google.android.exoplayer2.upstream.DataSpec;
 
 import java.io.IOException;
@@ -93,59 +92,6 @@ import java.util.Locale;
   public void onPositionDiscontinuity() {
 
   }
-
-  // MappingTrackSelector.EventListener
-
-  @Override
-  public void onTracksChanged(TrackInfo trackInfo) {
-    Log.d(TAG, "Tracks [");
-    // Log tracks associated to renderers.
-    for (int rendererIndex = 0; rendererIndex < trackInfo.rendererCount; rendererIndex++) {
-      TrackGroupArray trackGroups = trackInfo.getTrackGroups(rendererIndex);
-      TrackSelection trackSelection = trackInfo.getTrackSelection(rendererIndex);
-      if (trackGroups.length > 0) {
-        Log.d(TAG, "  Renderer:" + rendererIndex + " [");
-        for (int groupIndex = 0; groupIndex < trackGroups.length; groupIndex++) {
-          TrackGroup trackGroup = trackGroups.get(groupIndex);
-          String adaptiveSupport = getAdaptiveSupportString(
-              trackGroup.length, trackInfo.getAdaptiveSupport(rendererIndex, groupIndex, false));
-          Log.d(TAG, "    Group:" + groupIndex + ", adaptive_supported=" + adaptiveSupport + " [");
-          for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
-            String status = getTrackStatusString(trackSelection, trackGroup, trackIndex);
-            String formatSupport = getFormatSupportString(
-                trackInfo.getTrackFormatSupport(rendererIndex, groupIndex, trackIndex));
-            Log.d(TAG, "      " + status + " Track:" + trackIndex + ", "
-                + getFormatString(trackGroup.getFormat(trackIndex))
-                + ", supported=" + formatSupport);
-          }
-          Log.d(TAG, "    ]");
-        }
-        Log.d(TAG, "  ]");
-      }
-    }
-    // Log tracks not associated with a renderer.
-    TrackGroupArray trackGroups = trackInfo.getUnassociatedTrackGroups();
-    if (trackGroups.length > 0) {
-      Log.d(TAG, "  Renderer:None [");
-      for (int groupIndex = 0; groupIndex < trackGroups.length; groupIndex++) {
-        Log.d(TAG, "    Group:" + groupIndex + " [");
-        TrackGroup trackGroup = trackGroups.get(groupIndex);
-        for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
-          String status = getTrackStatusString(false);
-          String formatSupport = getFormatSupportString(
-              RendererCapabilities.FORMAT_UNSUPPORTED_TYPE);
-          Log.d(TAG, "      " + status + " Track:" + trackIndex + ", "
-              + getFormatString(trackGroup.getFormat(trackIndex))
-              + ", supported=" + formatSupport);
-        }
-        Log.d(TAG, "    ]");
-      }
-      Log.d(TAG, "  ]");
-    }
-    Log.d(TAG, "]");
-  }
-
-  // MetadataRenderer.Output<List<Id3Frame>>
 
   @Override
   public void onMetadata(List<Id3Frame> id3Frames) {
@@ -331,4 +277,8 @@ import java.util.Locale;
     return enabled ? "[X]" : "[ ]";
   }
 
+  @Override
+  public void onTrackSelectionsChanged(TrackSelections trackSelections) {
+    Log.i(TAG,"trackSelections " + trackSelections);
+  }
 }
