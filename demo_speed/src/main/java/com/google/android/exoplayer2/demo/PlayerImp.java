@@ -68,7 +68,7 @@ public class PlayerImp implements IPlayer {
         }
         if (playerNeedsSource) {
             MediaSource mediaSource = buildMediaSource(uri,"");
-            player.prepare(mediaSource, false);
+            player.prepare(mediaSource);
             playerNeedsSource = false;
             playerUI.updateButtonVisibilities();
         }
