@@ -136,11 +136,6 @@ public class PlayerImp implements IPlayer {
     }
 
     @Override
-    public int getRendererType(int rendererIndx) {
-        return player.getRendererType(rendererIndx);
-    }
-
-    @Override
     public long getCurrentPosition() {
         return player.getCurrentPosition();
     }

@@ -58,7 +58,7 @@ public final class SonicMediaCodecAudioTrackRenderer extends MediaCodecAudioRend
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    protected final void onOutputFormatChanged(MediaCodec codec, MediaFormat outputFormat) {
+    protected final void onOutputFormatChanged(MediaCodec codec, MediaFormat outputFormat) throws ExoPlaybackException {
         super.onOutputFormatChanged(codec, outputFormat);
         int sampleRate = outputFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
         int channelCount = outputFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
@@ -143,7 +143,7 @@ public final class SonicMediaCodecAudioTrackRenderer extends MediaCodecAudioRend
         this.speed = speed;
         setSonicSpeed(speed);
         setSonicPitch(1);
-        setSonicRate(1 / speed);
+        setSonicRate(1);
     }
 
 }

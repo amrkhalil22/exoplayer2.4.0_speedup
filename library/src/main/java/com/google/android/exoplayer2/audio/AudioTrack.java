@@ -62,7 +62,7 @@ public final class AudioTrack {
 
   public void setPlaybackSpeed(float speed) {
     audioTrackUtil.setPlaybackSpeed(speed);
-    reset();
+    //reset();
   }
 
   /**
@@ -1442,7 +1442,7 @@ public final class AudioTrack {
       passthroughWorkaroundPauseOffset = 0;
       if (audioTrack != null) {
         sampleRate = audioTrack.getSampleRate();
-        audioTrack.setPlaybackRate((int) (sampleRate * speed));
+        //audioTrack.setPlaybackRate((int) (sampleRate * speed));
       }
     }
 

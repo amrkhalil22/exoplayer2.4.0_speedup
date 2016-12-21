@@ -28,8 +28,6 @@ public interface IPlayer {
 
     boolean isMediaNeddSource();
 
-    int getRendererType(int rendererIndx);
-
     long getCurrentPosition();
 
     SimpleExoPlayer getExoPlayer();
