@@ -706,8 +706,8 @@ public class SimpleExoPlayer implements ExoPlayer {
       DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
       @ExtensionRendererMode int extensionRendererMode, AudioRendererEventListener eventListener,
       AudioProcessor[] audioProcessors, ArrayList<Renderer> out) {
-      out.add(Util.SDK_INT <= 23 ? new MediaCodecAudioRenderer(MediaCodecSelector.DEFAULT, drmSessionManager, true,
-              mainHandler, eventListener, AudioCapabilities.getCapabilities(context)) : new SonicMediaCodecAudioTrackRenderer(MediaCodecSelector.DEFAULT, drmSessionManager, true,
+    out.add(Util.SDK_INT < 23 ? new SonicMediaCodecAudioTrackRenderer(MediaCodecSelector.DEFAULT, drmSessionManager, true,
+            mainHandler, eventListener, AudioCapabilities.getCapabilities(context)) : new MediaCodecAudioRenderer(MediaCodecSelector.DEFAULT, drmSessionManager, true,
             mainHandler, eventListener, AudioCapabilities.getCapabilities(context)));
 
     if (extensionRendererMode == EXTENSION_RENDERER_MODE_OFF) {
