@@ -1,3 +1,6 @@
+#About Speed
+[Here](https://github.com/yangwuan55/ExoPlayer/blob/playbackSpeed/SPEED.md)
+
 # ExoPlayer #
 
 ExoPlayer is an application level media player for Android. It provides an
