@@ -39,8 +39,8 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.mediacodec.MediaCodecRenderer.DecoderInitializationException;
 import com.google.android.exoplayer2.mediacodec.MediaCodecUtil.DecoderQueryException;
-import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelections;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.DebugTextViewHelper;
 import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
@@ -54,8 +54,7 @@ import java.net.CookiePolicy;
  * An activity that plays media using {@link SimpleExoPlayer}.
  */
 public class PlayerActivity extends Activity implements OnKeyListener, OnTouchListener,
-    OnClickListener, ExoPlayer.EventListener, SimpleExoPlayer.VideoListener,
-    MappingTrackSelector.EventListener, IPlayerUI, PlaybackControlView.VisibilityListener {
+    OnClickListener, ExoPlayer.EventListener, SimpleExoPlayer.VideoListener, IPlayerUI, PlaybackControlView.VisibilityListener {
 
   public static final String DRM_SCHEME_UUID_EXTRA = "drm_scheme_uuid";
   public static final String DRM_LICENSE_URL = "drm_license_url";
@@ -250,6 +249,11 @@ public class PlayerActivity extends Activity implements OnKeyListener, OnTouchLi
   }
 
   @Override
+  public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+  }
+
+  @Override
   public void onPlayerError(ExoPlaybackException e) {
     String errorString = null;
     if (e.type == ExoPlaybackException.TYPE_RENDERER) {
@@ -298,12 +302,6 @@ public class PlayerActivity extends Activity implements OnKeyListener, OnTouchLi
   public void onRenderedFirstFrame() {
 
   }
-
-  @Override
-  public void onVideoTracksDisabled() {
-
-  }
-
 
   // User controls
 
@@ -357,8 +355,4 @@ public class PlayerActivity extends Activity implements OnKeyListener, OnTouchLi
     debugRootView.setVisibility(visibility);
   }
 
-  @Override
-  public void onTrackSelectionsChanged(TrackSelections trackSelections) {
-
-  }
 }

@@ -16,7 +16,7 @@ import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
@@ -57,13 +57,10 @@ public class PlayerImp implements IPlayer {
     public void initPlayer(Uri uri) {
         this.uri = uri;
         if (!hasPlayer()) {
-            boolean preferExtensionDecoders = false;
             eventLogger = new EventLogger();
-            videoTrackSelectionFactory = new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
-            trackSelector = new DefaultTrackSelector(mainHandler, videoTrackSelectionFactory);
-            trackSelector.addListener(playerUI);
-            trackSelector.addListener(eventLogger);
-            newPlayer(preferExtensionDecoders);
+            videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
+            trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+            newPlayer();
             playerNeedsSource = true;
         }
         if (playerNeedsSource) {
@@ -88,12 +85,11 @@ public class PlayerImp implements IPlayer {
         trackSelector = null;
     }
 
-    private void newPlayer(boolean preferExtensionDecoders) {
+    private void newPlayer() {
         player = ExoPlayerFactory.newSimpleInstance(playerUI.getContext(), trackSelector, new DefaultLoadControl(),
-                null, preferExtensionDecoders);
+                null);
         player.addListener(playerUI);
         player.addListener(eventLogger);
-        player.setId3Output(eventLogger);
         player.setVideoListener(playerUI);
 
         player.seekTo(playerPosition);

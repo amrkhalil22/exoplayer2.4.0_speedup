@@ -23,33 +23,25 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.RendererCapabilities;
 import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.drm.StreamingDrmSessionManager;
+import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.metadata.MetadataRenderer;
-import com.google.android.exoplayer2.metadata.id3.ApicFrame;
-import com.google.android.exoplayer2.metadata.id3.GeobFrame;
-import com.google.android.exoplayer2.metadata.id3.Id3Frame;
-import com.google.android.exoplayer2.metadata.id3.PrivFrame;
-import com.google.android.exoplayer2.metadata.id3.TextInformationFrame;
-import com.google.android.exoplayer2.metadata.id3.TxxxFrame;
 import com.google.android.exoplayer2.source.AdaptiveMediaSourceEventListener;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.TrackGroup;
-import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelections;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.upstream.DataSpec;
 
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.util.List;
 import java.util.Locale;
 
 /**
  * Logs player events using {@link Log}.
  */
 /* package */ final class EventLogger implements ExoPlayer.EventListener, AdaptiveMediaSourceEventListener,
-    ExtractorMediaSource.EventListener, StreamingDrmSessionManager.EventListener,
-    MappingTrackSelector.EventListener, MetadataRenderer.Output<List<Id3Frame>> {
+    ExtractorMediaSource.EventListener, MetadataRenderer.Output {
 
   private static final String TAG = "EventLogger";
   private static final NumberFormat TIME_FORMAT;
@@ -84,6 +76,11 @@ import java.util.Locale;
   }
 
   @Override
+  public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+  }
+
+  @Override
   public void onPlayerError(ExoPlaybackException e) {
     Log.e(TAG, "playerFailed [" + getSessionTimeString() + "]", e);
   }
@@ -92,46 +89,6 @@ import java.util.Locale;
   public void onPositionDiscontinuity() {
 
   }
-
-  @Override
-  public void onMetadata(List<Id3Frame> id3Frames) {
-    for (Id3Frame id3Frame : id3Frames) {
-      if (id3Frame instanceof TxxxFrame) {
-        TxxxFrame txxxFrame = (TxxxFrame) id3Frame;
-        Log.i(TAG, String.format("ID3 TimedMetadata %s: description=%s, value=%s", txxxFrame.id,
-            txxxFrame.description, txxxFrame.value));
-      } else if (id3Frame instanceof PrivFrame) {
-        PrivFrame privFrame = (PrivFrame) id3Frame;
-        Log.i(TAG, String.format("ID3 TimedMetadata %s: owner=%s", privFrame.id, privFrame.owner));
-      } else if (id3Frame instanceof GeobFrame) {
-        GeobFrame geobFrame = (GeobFrame) id3Frame;
-        Log.i(TAG, String.format("ID3 TimedMetadata %s: mimeType=%s, filename=%s, description=%s",
-            geobFrame.id, geobFrame.mimeType, geobFrame.filename, geobFrame.description));
-      } else if (id3Frame instanceof ApicFrame) {
-        ApicFrame apicFrame = (ApicFrame) id3Frame;
-        Log.i(TAG, String.format("ID3 TimedMetadata %s: mimeType=%s, description=%s",
-            apicFrame.id, apicFrame.mimeType, apicFrame.description));
-      } else if (id3Frame instanceof TextInformationFrame) {
-        TextInformationFrame textInformationFrame = (TextInformationFrame) id3Frame;
-        Log.i(TAG, String.format("ID3 TimedMetadata %s: description=%s", textInformationFrame.id,
-            textInformationFrame.description));
-      } else {
-        Log.i(TAG, String.format("ID3 TimedMetadata %s", id3Frame.id));
-      }
-    }
-  }
-
-  @Override
-  public void onDrmSessionManagerError(Exception e) {
-    printInternalError("drmSessionManagerError", e);
-  }
-
-  @Override
-  public void onDrmKeysLoaded() {
-    Log.d(TAG, "drmKeysLoaded [" + getSessionTimeString() + "]");
-  }
-
-  // ExtractorMediaSource.EventListener
 
   @Override
   public void onLoadError(IOException error) {
@@ -278,7 +235,7 @@ import java.util.Locale;
   }
 
   @Override
-  public void onTrackSelectionsChanged(TrackSelections trackSelections) {
-    Log.i(TAG,"trackSelections " + trackSelections);
+  public void onMetadata(Metadata metadata) {
+
   }
 }
