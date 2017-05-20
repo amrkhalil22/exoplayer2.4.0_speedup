@@ -17,6 +17,7 @@ package com.google.android.exoplayer2.ext.flac;
 
 import android.os.Handler;
 import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.audio.AudioProcessor;
 import com.google.android.exoplayer2.audio.AudioRendererEventListener;
 import com.google.android.exoplayer2.audio.SimpleDecoderAudioRenderer;
@@ -57,4 +58,18 @@ public class LibflacAudioRenderer extends SimpleDecoderAudioRenderer {
     return new FlacDecoder(NUM_BUFFERS, NUM_BUFFERS, format.initializationData);
   }
 
+  @Override
+  public PlaybackParameters setPlaybackParameters(PlaybackParameters playbackParameters) {
+    return null;
+  }
+
+  @Override
+  public PlaybackParameters getPlaybackParameters() {
+    return null;
+  }
+
+  @Override
+  public void setPlaybackSpeed(float speed) {
+
+  }
 }

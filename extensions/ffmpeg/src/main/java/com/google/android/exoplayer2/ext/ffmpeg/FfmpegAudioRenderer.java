@@ -19,6 +19,7 @@ import android.os.Handler;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.audio.AudioProcessor;
 import com.google.android.exoplayer2.audio.AudioRendererEventListener;
 import com.google.android.exoplayer2.audio.SimpleDecoderAudioRenderer;
@@ -81,4 +82,18 @@ public final class FfmpegAudioRenderer extends SimpleDecoderAudioRenderer {
         Format.NO_VALUE, channelCount, sampleRate, C.ENCODING_PCM_16BIT, null, null, 0, null);
   }
 
+  @Override
+  public PlaybackParameters setPlaybackParameters(PlaybackParameters playbackParameters) {
+    return null;
+  }
+
+  @Override
+  public PlaybackParameters getPlaybackParameters() {
+    return null;
+  }
+
+  @Override
+  public void setPlaybackSpeed(float speed) {
+
+  }
 }

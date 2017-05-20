@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.mediacodec.MediaCodecRenderer.DecoderInitializationException;
@@ -288,6 +289,11 @@ public class PlayerActivity extends Activity implements OnKeyListener, OnTouchLi
 
   @Override
   public void onPositionDiscontinuity() {
+
+  }
+
+  @Override
+  public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
 
   }
 

@@ -17,6 +17,7 @@ package com.google.android.exoplayer2.ext.opus;
 
 import android.os.Handler;
 import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.audio.AudioProcessor;
 import com.google.android.exoplayer2.audio.AudioRendererEventListener;
 import com.google.android.exoplayer2.audio.SimpleDecoderAudioRenderer;
@@ -73,4 +74,18 @@ public final class LibopusAudioRenderer extends SimpleDecoderAudioRenderer {
         format.initializationData, mediaCrypto);
   }
 
+  @Override
+  public PlaybackParameters setPlaybackParameters(PlaybackParameters playbackParameters) {
+    return null;
+  }
+
+  @Override
+  public PlaybackParameters getPlaybackParameters() {
+    return null;
+  }
+
+  @Override
+  public void setPlaybackSpeed(float speed) {
+
+  }
 }
