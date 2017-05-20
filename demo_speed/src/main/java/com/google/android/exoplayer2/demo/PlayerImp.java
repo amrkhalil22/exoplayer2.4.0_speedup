@@ -64,7 +64,7 @@ public class PlayerImp implements IPlayer {
             playerNeedsSource = true;
         }
         if (playerNeedsSource) {
-            MediaSource mediaSource = buildMediaSource(uri,"");
+            MediaSource mediaSource = buildMediaSource(uri, "");
             player.prepare(mediaSource);
             playerNeedsSource = false;
             playerUI.updateButtonVisibilities();
@@ -152,6 +152,6 @@ public class PlayerImp implements IPlayer {
     }
 
     private void flagThePosition() {
-      playerPosition = getCurrentPosition();
+        playerPosition = getCurrentPosition();
     }
 }

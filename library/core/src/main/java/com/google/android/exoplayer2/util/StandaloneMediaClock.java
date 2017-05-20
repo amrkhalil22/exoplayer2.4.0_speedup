@@ -27,16 +27,21 @@ import com.google.android.exoplayer2.PlaybackParameters;
 public final class StandaloneMediaClock implements MediaClock {
 
     private boolean started;
-    private long baseUs;
-    private long baseElapsedMs;
-    private PlaybackParameters playbackParameters;
-    private float speed = 1.0f;
-    private long lastRealTime;
-    private double lastMediaTime;
 
     /**
-     * Creates a new standalone media clock.
+     * The media time(ms) on last sync.
      */
+    private double lastMediaTime;
+    private PlaybackParameters playbackParameters;
+    /**
+     * The {@link SystemClock#elapsedRealtime()} (ms) on last sync.
+     */
+    private long lastRealTime;
+
+    /*
+     * speed ratio between media time and real time
+     */
+    private float speed = 1.0f;
     public StandaloneMediaClock() {
         playbackParameters = PlaybackParameters.DEFAULT;
     }
@@ -46,8 +51,8 @@ public final class StandaloneMediaClock implements MediaClock {
      */
     public void start() {
         if (!started) {
-            baseElapsedMs = SystemClock.elapsedRealtime();
             started = true;
+            lastRealTime = SystemClock.elapsedRealtime();
         }
     }
 
@@ -56,21 +61,18 @@ public final class StandaloneMediaClock implements MediaClock {
      */
     public void stop() {
         if (started) {
-            setPositionUs(getPositionUs());
+            updateMediaTime();
             started = false;
         }
     }
 
-    /**
-     * Sets the clock's position.
-     *
-     * @param positionUs The position to set in microseconds.
-     */
-    public void setPositionUs(long positionUs) {
-        baseUs = positionUs;
-        if (started) {
-            baseElapsedMs = SystemClock.elapsedRealtime();
-        }
+    public float getPlaybackSpeed() {
+        return speed;
+    }
+
+    public void setPlaybackSpeed(float newSpeed) {
+        updateMediaTime();
+        speed = newSpeed;
     }
 
     /**
@@ -83,34 +85,18 @@ public final class StandaloneMediaClock implements MediaClock {
         playbackParameters = clock.getPlaybackParameters();
     }
 
+    /**
+     * @param timeUs The position to set in microseconds.
+     */
+    public void setPositionUs(long timeUs) {
+        lastRealTime = SystemClock.elapsedRealtime();
+        lastMediaTime = timeUs / 1000.0;
+    }
+
     @Override
     public long getPositionUs() {
-        long positionUs = baseUs;
-        if (started) {
-            long elapsedSinceBaseMs = SystemClock.elapsedRealtime() - baseElapsedMs;
-            if (playbackParameters.speed == 1f) {
-                positionUs += C.msToUs(elapsedSinceBaseMs);
-            } else {
-                positionUs += playbackParameters.getSpeedAdjustedDurationUs(elapsedSinceBaseMs);
-            }
-        }
-        return positionUs;
-    }
-
-    public float getPlaybackSpeed() {
-        return speed;
-    }
-
-    public void setPlaybackSpeed(float newSpeed) {
         updateMediaTime();
-        speed = newSpeed;
-    }
-
-    private void updateMediaTime() {
-        if (!started) return;
-        long realTime = SystemClock.elapsedRealtime();
-        lastMediaTime = lastMediaTime + (realTime - lastRealTime) * speed;
-        lastRealTime = realTime;
+        return (long) (lastMediaTime * 1000);
     }
 
     @Override
@@ -128,4 +114,10 @@ public final class StandaloneMediaClock implements MediaClock {
         return playbackParameters;
     }
 
+    private void updateMediaTime() {
+        if (!started) return;
+        long realTime = SystemClock.elapsedRealtime();
+        lastMediaTime = lastMediaTime + (realTime - lastRealTime) * speed;
+        lastRealTime = realTime;
+    }
 }

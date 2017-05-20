@@ -22,61 +22,61 @@ import java.util.Arrays;
  */
 public final class TrackSelectionArray {
 
-  /**
-   * The number of selections in the result. Greater than or equal to zero.
-   */
-  public final int length;
+    /**
+     * The number of selections in the result. Greater than or equal to zero.
+     */
+    public final int length;
 
-  private final TrackSelection[] trackSelections;
+    private final TrackSelection[] trackSelections;
 
-  // Lazily initialized hashcode.
-  private int hashCode;
+    // Lazily initialized hashcode.
+    private int hashCode;
 
-  /**
-   * @param trackSelections The selections. Must not be null, but may contain null elements.
-   */
-  public TrackSelectionArray(TrackSelection... trackSelections) {
-    this.trackSelections = trackSelections;
-    this.length = trackSelections.length;
-  }
-
-  /**
-   * Returns the selection at a given index.
-   *
-   * @param index The index of the selection.
-   * @return The selection.
-   */
-  public TrackSelection get(int index) {
-    return trackSelections[index];
-  }
-
-  /**
-   * Returns the selections in a newly allocated array.
-   */
-  public TrackSelection[] getAll() {
-    return trackSelections.clone();
-  }
-
-  @Override
-  public int hashCode() {
-    if (hashCode == 0) {
-      int result = 17;
-      result = 31 * result + Arrays.hashCode(trackSelections);
-      hashCode = result;
+    /**
+     * @param trackSelections The selections. Must not be null, but may contain null elements.
+     */
+    public TrackSelectionArray(TrackSelection... trackSelections) {
+        this.trackSelections = trackSelections;
+        this.length = trackSelections.length;
     }
-    return hashCode;
-  }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
+    /**
+     * Returns the selection at a given index.
+     *
+     * @param index The index of the selection.
+     * @return The selection.
+     */
+    public TrackSelection get(int index) {
+        return trackSelections[index];
     }
-    if (obj == null || getClass() != obj.getClass()) {
-      return false;
+
+    /**
+     * Returns the selections in a newly allocated array.
+     */
+    public TrackSelection[] getAll() {
+        return trackSelections.clone();
     }
-    TrackSelectionArray other = (TrackSelectionArray) obj;
-    return Arrays.equals(trackSelections, other.trackSelections);
-  }
+
+    @Override
+    public int hashCode() {
+        if (hashCode == 0) {
+            int result = 17;
+            result = 31 * result + Arrays.hashCode(trackSelections);
+            hashCode = result;
+        }
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        TrackSelectionArray other = (TrackSelectionArray) obj;
+        return Arrays.equals(trackSelections, other.trackSelections);
+    }
 
 }
