@@ -1002,13 +1002,13 @@ public final class AudioTrack {
       return this.playbackParameters;
     }
     playbackParameters = new PlaybackParameters(
-        sonicAudioProcessor.setSpeed(playbackParameters.speed),
-        sonicAudioProcessor.setPitch(playbackParameters.pitch));
+            sonicAudioProcessor.setSpeed(playbackParameters.speed),
+            sonicAudioProcessor.setPitch(playbackParameters.pitch));
     PlaybackParameters lastSetPlaybackParameters =
-        drainingPlaybackParameters != null ? drainingPlaybackParameters
-            : !playbackParametersCheckpoints.isEmpty()
-                ? playbackParametersCheckpoints.getLast().playbackParameters
-                : this.playbackParameters;
+            drainingPlaybackParameters != null ? drainingPlaybackParameters
+                    : !playbackParametersCheckpoints.isEmpty()
+                    ? playbackParametersCheckpoints.getLast().playbackParameters
+                    : this.playbackParameters;
     if (!playbackParameters.equals(lastSetPlaybackParameters)) {
       if (isInitialized()) {
         // Drain the audio processors so we can determine the frame position at which the new
@@ -1019,6 +1019,10 @@ public final class AudioTrack {
       }
     }
     return this.playbackParameters;
+  }
+
+  public void setPlaybackParams(PlaybackParams playbackParams) {
+    audioTrackUtil.setPlaybackParams(playbackParams);
   }
 
   /**
